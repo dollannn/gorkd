@@ -11,6 +11,8 @@ pub trait LlmProvider: Send + Sync {
 
     fn model_id(&self) -> &str;
 
+    fn provider_name(&self) -> &str;
+
     fn max_context_tokens(&self) -> usize {
         128_000
     }

@@ -6,6 +6,7 @@ pub mod config;
 pub mod error;
 pub mod openai;
 pub mod prompt;
+pub mod registry;
 pub mod types;
 
 pub use anthropic::AnthropicProvider;
@@ -19,4 +20,5 @@ pub use prompt::{
     build_synthesis_messages, estimate_messages_tokens, estimate_token_count,
     SYNTHESIS_SYSTEM_PROMPT,
 };
+pub use registry::{LlmRegistry, LlmRegistryBuilder};
 pub use types::{ChatRequest, ChatResponse, FinishReason, Message, Role, TokenUsage};

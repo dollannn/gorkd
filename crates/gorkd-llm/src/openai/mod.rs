@@ -83,6 +83,10 @@ impl LlmProvider for OpenAiProvider {
         &self.model
     }
 
+    fn provider_name(&self) -> &str {
+        "openai"
+    }
+
     fn max_context_tokens(&self) -> usize {
         CONTEXT_WINDOW_TOKENS
     }

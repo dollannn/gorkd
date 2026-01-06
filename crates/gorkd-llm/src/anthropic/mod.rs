@@ -89,6 +89,10 @@ impl LlmProvider for AnthropicProvider {
         &self.model
     }
 
+    fn provider_name(&self) -> &str {
+        "anthropic"
+    }
+
     fn max_context_tokens(&self) -> usize {
         CONTEXT_WINDOW_TOKENS
     }

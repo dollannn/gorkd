@@ -24,7 +24,7 @@ pub enum SearchError {
     Provider(String),
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, Clone, Error)]
 #[non_exhaustive]
 pub enum LlmError {
     #[error("model not available: {model}")]

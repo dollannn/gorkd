@@ -100,6 +100,10 @@ impl LlmProvider for MockLlmProvider {
         &self.model_id
     }
 
+    fn provider_name(&self) -> &str {
+        "mock"
+    }
+
     fn max_context_tokens(&self) -> usize {
         128_000
     }

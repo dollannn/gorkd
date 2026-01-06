@@ -1,6 +1,6 @@
 # Phase 4: Provider Registry
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1 day
 **Depends on**: Phase 2, Phase 3
 
@@ -77,12 +77,12 @@ Request → Primary Provider
 
 ## Deliverables
 
-- [ ] LlmRegistry struct with provider management
-- [ ] Model lookup by ID
-- [ ] Automatic fallback on retryable errors
-- [ ] Builder pattern for easy construction
-- [ ] AppState updated to use registry
-- [ ] API can specify model (optional parameter)
-- [ ] Unit tests for fallback logic
-- [ ] `cargo test -p gorkd-llm` passes
-- [ ] `cargo test -p gorkd-api` passes
+- [x] LlmRegistry struct with provider management
+- [x] Model lookup by ID
+- [x] Automatic fallback on retryable errors
+- [x] Builder pattern for easy construction
+- [x] AppState updated to use registry
+- [x] API can specify model (optional parameter)
+- [x] Unit tests for fallback logic
+- [x] `cargo test -p gorkd-llm` passes
+- [x] `cargo test -p gorkd-api` passes
