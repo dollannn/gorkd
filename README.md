@@ -52,16 +52,23 @@ Web search + LLM reasoning + source citations. Accessible via web UI, Discord, a
 
 ## Quickstart
 
-> **Status**: Greenfield. These commands are targets, not yet implemented.
-
 ### Requirements
 
 - Rust 1.75+
-- Node.js 20+ / Bun 1.0+
-- Docker (for local Postgres + vector DB)
-- API keys: OpenAI/Anthropic (LLM), Tavily/Exa (search)
+- Node.js 20+ / Bun 1.0+ (for web UI)
+- Docker (optional, for Postgres + vector DB)
 
-### Run locally
+### Run locally (with mock providers)
+
+```bash
+# Start API server (uses mock providers, no API keys needed)
+cargo run -p gorkd-api
+
+# API available at http://localhost:4000
+# Docs at http://localhost:4000/docs
+```
+
+### Run with real providers
 
 ```bash
 # Start infrastructure
@@ -76,10 +83,6 @@ cargo run -p gorkd-api
 
 # Start web UI (separate terminal)
 cd web && bun dev
-
-# Start bots (optional, separate terminals)
-cargo run -p gorkd-bot-discord
-cargo run -p gorkd-bot-slack
 ```
 
 ### Ports
@@ -130,19 +133,21 @@ cd web && bun test && bun run check
 
 ## Status
 
-**Phase**: Design & Documentation
+**Phase**: MVP Development
+
+### Done
+- [x] Core research pipeline design
+- [x] API contract definition
+- [x] Project scaffolding
+- [x] End-to-end research flow (API with mock providers)
 
 ### Now
-- [ ] Core research pipeline design
-- [ ] API contract definition
-- [ ] Project scaffolding
+- [ ] Real search provider integration (Tavily)
+- [ ] Real LLM provider integration (OpenAI/Anthropic)
+- [ ] Basic web UI
 
 ### Next
-- [ ] End-to-end research flow (API only)
-- [ ] Basic web UI
 - [ ] Discord bot MVP
-
-### Later
 - [ ] Slack bot
 - [ ] Vector caching
 - [ ] Source quality scoring

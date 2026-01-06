@@ -5,6 +5,7 @@ mod error;
 mod id;
 mod job;
 pub mod mock;
+pub mod pipeline;
 mod query;
 mod search;
 mod source;
@@ -15,6 +16,10 @@ pub use error::{IdParseError, QueryError, ValidationError, MAX_QUERY_LENGTH};
 pub use id::{JobId, SourceId};
 pub use job::{JobStatus, ResearchJob};
 pub use mock::{MockLlmProvider, MockSearchProvider, MockStore};
+pub use pipeline::{
+    Executor, ExecutorConfig, Pipeline, PipelineConfig, PipelineError, PipelineResult, Planner,
+    PlannerConfig, Synthesizer, SynthesizerConfig,
+};
 pub use query::{QueryIntent, QuestionType, TimeConstraint};
 pub use search::{
     ContentType, ProviderId, Recency, SearchFilters, SearchPlan, SearchQuery, DEFAULT_MAX_SOURCES,

@@ -2,7 +2,7 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 
 use gorkd_api::{app, AppState};
-use gorkd_core::MockStore;
+use gorkd_core::{MockLlmProvider, MockSearchProvider, MockStore};
 use tokio::signal;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -19,7 +19,10 @@ async fn main() {
         .unwrap_or(4000);
 
     let store = Arc::new(MockStore::new());
-    let state = Arc::new(AppState::new(store));
+    let search_provider = Arc::new(MockSearchProvider::new("mock-tavily"));
+    let llm_provider = Arc::new(MockLlmProvider::new("mock-gpt-4"));
+
+    let state = Arc::new(AppState::new(store, search_provider, llm_provider));
 
     let app = app(state);
 

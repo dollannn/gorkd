@@ -38,3 +38,6 @@ thiserror.workspace = true
 chrono.workspace = true
 
 [dev-dependencies]
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+axum-test = "18"
+serde_json.workspace = true

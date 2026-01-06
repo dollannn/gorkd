@@ -1,6 +1,6 @@
 # Phase 5: Integration Smoke Test
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1 day
 **Depends on**: Phase 4
 
@@ -93,9 +93,9 @@ async fn test_research_happy_path() {
 
 ## Deliverables
 
-- [ ] Full query -> answer flow works via API
-- [ ] `cargo test -p gorkd-api` integration tests pass
-- [ ] Job progresses through all status states
-- [ ] Mock providers are easily swappable
-- [ ] README quickstart works for new developer
-- [ ] `cargo build --release` succeeds
+- [x] Full query -> answer flow works via API
+- [x] `cargo test -p gorkd-api` integration tests pass
+- [x] Job progresses through all status states
+- [x] Mock providers are easily swappable
+- [x] README quickstart works for new developer
+- [x] `cargo build --release` succeeds

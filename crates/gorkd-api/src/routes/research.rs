@@ -32,6 +32,22 @@ pub async fn create_research(
 
     tracing::info!(job_id = %job_id, query = %req.query, "created research job");
 
+    let pipeline = state.pipeline();
+    tokio::spawn(async move {
+        match pipeline.run(job).await {
+            Ok(result) => {
+                tracing::info!(
+                    job_id = %result.job.id,
+                    sources = result.sources.len(),
+                    "pipeline completed"
+                );
+            }
+            Err(e) => {
+                tracing::error!(error = %e, "pipeline failed");
+            }
+        }
+    });
+
     let response = CreateResearchResponse {
         job_id: job_id.clone(),
         status: JobStatus::Pending,
