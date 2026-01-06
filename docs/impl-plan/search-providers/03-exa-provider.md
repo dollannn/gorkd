@@ -1,6 +1,6 @@
 # Phase 3: Exa Provider
 
-**Status**: Planned
+**Status**: Done
 **Duration**: ~1-2 days
 **Depends on**: Phase 1
 
@@ -89,10 +89,10 @@ Implement Exa AI search provider for semantic/neural search capabilities. Exa ex
 
 ## Deliverables
 
-- [ ] ExaProvider implements SearchProvider
-- [ ] All SearchFilters mapped to Exa params
-- [ ] Score normalization (Exa scores vary widely)
-- [ ] Errors mapped to SearchError variants
-- [ ] Unit tests with mocked responses
-- [ ] Integration test (feature-gated)
-- [ ] `cargo test -p gorkd-search` passes
+- [x] ExaProvider implements SearchProvider
+- [x] All SearchFilters mapped to Exa params
+- [x] Score normalization (Exa scores vary widely)
+- [x] Errors mapped to SearchError variants
+- [x] Unit tests with mocked responses
+- [x] Integration test (feature-gated)
+- [x] `cargo test -p gorkd-search` passes

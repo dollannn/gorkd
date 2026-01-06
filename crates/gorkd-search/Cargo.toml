@@ -27,6 +27,9 @@ thiserror.workspace = true
 # Logging
 tracing.workspace = true
 
+# Time
+chrono.workspace = true
+
 # URL handling
 url = "2.5"
 
