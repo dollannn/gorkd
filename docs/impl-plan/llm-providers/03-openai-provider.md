@@ -1,6 +1,6 @@
 # Phase 3: OpenAI Provider
 
-**Status**: Planned
+**Status**: Done
 **Duration**: ~1-2 days
 **Depends on**: Phase 1 (Shared Infrastructure)
 
@@ -66,12 +66,12 @@ OpenAI's native JSON mode ensures valid JSON output:
 
 ## Deliverables
 
-- [ ] OpenAiProvider implements LlmProvider trait
-- [ ] Chat Completions API integration working
-- [ ] JSON mode enabled for structured output
-- [ ] Proper error mapping (rate limits, auth, network)
-- [ ] Citation extraction from response
-- [ ] Token usage tracked in SynthesisMetadata
-- [ ] Unit tests with mocked HTTP responses
+- [x] OpenAiProvider implements LlmProvider trait
+- [x] Chat Completions API integration working
+- [x] JSON mode enabled for structured output
+- [x] Proper error mapping (rate limits, auth, network)
+- [x] Citation extraction from response
+- [x] Token usage tracked in SynthesisMetadata
+- [x] Unit tests with mocked HTTP responses
 - [ ] Integration test (skipped without API key)
-- [ ] `cargo test -p gorkd-llm` passes
+- [x] `cargo test -p gorkd-llm` passes

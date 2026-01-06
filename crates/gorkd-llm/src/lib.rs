@@ -14,6 +14,7 @@ pub use config::{
     AnthropicConfig, LlmConfig, OpenAiConfig, DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT_SECS,
 };
 pub use error::{map_anthropic_error, map_openai_error, map_reqwest_error};
+pub use openai::OpenAiProvider;
 pub use prompt::{
     build_synthesis_messages, estimate_messages_tokens, estimate_token_count,
     SYNTHESIS_SYSTEM_PROMPT,
