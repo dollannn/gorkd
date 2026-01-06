@@ -117,18 +117,25 @@ All configuration via environment variables. See `.env.example` for full list.
 
 ## Development
 
+### Rust (Backend)
+
 ```bash
-# Run all tests
-cargo test
+cargo test                    # Run all tests
+cargo fmt                     # Format code
+cargo clippy -- -D warnings   # Lint
+```
 
-# Format code
-cargo fmt
+### Frontend (Web UI)
 
-# Lint
-cargo clippy -- -D warnings
-
-# Frontend
-cd web && bun test && bun run check
+```bash
+cd web
+bun install       # Install dependencies
+bun dev           # Start dev server (http://localhost:5173)
+bun run build     # Production build
+bun run check     # Type check
+bun run lint      # ESLint
+bun run format    # Prettier format
+bun test          # Run tests
 ```
 
 ## Status

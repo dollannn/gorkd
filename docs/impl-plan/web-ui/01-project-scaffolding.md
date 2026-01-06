@@ -1,6 +1,6 @@
 # Phase 1: Project Scaffolding
 
-**Status**: Planned
+**Status**: Done
 **Duration**: ~0.5 days
 **Depends on**: None
 
@@ -63,10 +63,10 @@ Initialize SvelteKit project with Bun, TypeScript, and Tailwind CSS. Configure t
 
 ## Deliverables
 
-- [ ] `bun install` succeeds
-- [ ] `bun dev` starts dev server on port 5173
-- [ ] `bun run build` succeeds
-- [ ] `bun run check` passes (svelte-check)
-- [ ] `bun run lint` passes
-- [ ] `bun test` runs (even if no tests yet)
-- [ ] Tailwind classes work in a test component
+- [x] `bun install` succeeds
+- [x] `bun dev` starts dev server on port 5173
+- [x] `bun run build` succeeds
+- [x] `bun run check` passes (svelte-check)
+- [x] `bun run lint` passes
+- [x] `bun test` runs (even if no tests yet)
+- [x] Tailwind classes work in a test component
