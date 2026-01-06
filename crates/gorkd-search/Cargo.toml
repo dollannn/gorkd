@@ -27,4 +27,7 @@ thiserror.workspace = true
 # Logging
 tracing.workspace = true
 
+# URL handling
+url = "2.5"
+
 [dev-dependencies]

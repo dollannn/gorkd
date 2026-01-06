@@ -1,1 +1,1 @@
-
+//! SearXNG search provider implementation.

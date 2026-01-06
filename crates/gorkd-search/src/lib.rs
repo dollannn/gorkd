@@ -3,9 +3,15 @@
 
 //! Search provider implementations (Tavily, Exa, SearXNG).
 
-/// Exa search provider.
+mod client;
+mod config;
+mod registry;
+
 pub mod exa;
-/// SearXNG search provider.
 pub mod searxng;
-/// Tavily search provider.
 pub mod tavily;
+
+pub use client::{HttpClient, HttpClientError};
+pub use config::{ConfigError, SearchConfig};
+pub use gorkd_core::traits::{SearchProvider, SearchResult};
+pub use registry::ProviderRegistry;
