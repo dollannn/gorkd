@@ -19,20 +19,24 @@ function getInitialTheme(): Theme {
 	return 'light'
 }
 
+function applyTheme(theme: Theme): void {
+	if (!browser) return
+
+	localStorage.setItem(STORAGE_KEY, theme)
+
+	if (theme === 'dark') {
+		document.documentElement.classList.add('dark')
+	} else {
+		document.documentElement.classList.remove('dark')
+	}
+}
+
 function createThemeStore() {
 	let theme = $state<Theme>(getInitialTheme())
 
-	$effect(() => {
-		if (!browser) return
-
-		localStorage.setItem(STORAGE_KEY, theme)
-
-		if (theme === 'dark') {
-			document.documentElement.classList.add('dark')
-		} else {
-			document.documentElement.classList.remove('dark')
-		}
-	})
+	if (browser) {
+		applyTheme(theme)
+	}
 
 	return {
 		get value() {
@@ -40,9 +44,11 @@ function createThemeStore() {
 		},
 		toggle() {
 			theme = theme === 'light' ? 'dark' : 'light'
+			applyTheme(theme)
 		},
 		set(newTheme: Theme) {
 			theme = newTheme
+			applyTheme(theme)
 		},
 	}
 }
