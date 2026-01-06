@@ -1,0 +1,33 @@
+[package]
+name = "gorkd-bot-slack"
+description = "Slack bot adapter for gorkd"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "gorkd-bot-slack"
+path = "src/main.rs"
+
+[dependencies]
+# Internal
+gorkd-core.workspace = true
+
+# Slack
+slack-morphism.workspace = true
+
+# Async
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+
+# Error handling
+anyhow.workspace = true
+
+# Logging
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]

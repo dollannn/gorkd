@@ -1,0 +1,33 @@
+[package]
+name = "gorkd-store"
+description = "Storage implementations for gorkd (Postgres, vector DB)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Internal
+gorkd-core.workspace = true
+
+# Async
+tokio.workspace = true
+async-trait.workspace = true
+
+# Database
+sqlx.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# Error handling
+thiserror.workspace = true
+
+# Logging
+tracing.workspace = true
+
+# UUID
+uuid.workspace = true
+
+[dev-dependencies]

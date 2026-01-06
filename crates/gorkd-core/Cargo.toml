@@ -1,0 +1,23 @@
+[package]
+name = "gorkd-core"
+description = "Core domain types and research pipeline logic for gorkd"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# Error handling
+thiserror.workspace = true
+
+# Time
+chrono.workspace = true
+
+# UUID
+uuid.workspace = true
+
+[dev-dependencies]
