@@ -1,6 +1,6 @@
 # Phase 2: API Client & Types
 
-**Status**: Planned
+**Status**: Done
 **Duration**: ~0.5-1 day
 **Depends on**: Phase 1 (Project Scaffolding)
 
@@ -78,10 +78,10 @@ const sources = await client.getSources(job_id)
 
 ## Deliverables
 
-- [ ] All API types defined and exported
-- [ ] Client can start research job
-- [ ] Client can fetch job status
-- [ ] Client can fetch sources
-- [ ] Error responses parsed into ApiError
-- [ ] Unit tests pass for error handling
-- [ ] Types match `docs/interfaces/http-api.md` exactly
+- [x] All API types defined and exported
+- [x] Client can start research job
+- [x] Client can fetch job status
+- [x] Client can fetch sources
+- [x] Error responses parsed into ApiError
+- [x] Unit tests pass for error handling
+- [x] Types match `docs/interfaces/http-api.md` exactly
