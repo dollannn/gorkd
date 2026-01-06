@@ -30,4 +30,8 @@ tracing.workspace = true
 # URL handling
 url = "2.5"
 
+[features]
+integration = []
+
 [dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

@@ -15,3 +15,4 @@ pub use client::{HttpClient, HttpClientError};
 pub use config::{ConfigError, SearchConfig};
 pub use gorkd_core::traits::{SearchProvider, SearchResult};
 pub use registry::ProviderRegistry;
+pub use tavily::{SearchDepth, TavilyProvider};

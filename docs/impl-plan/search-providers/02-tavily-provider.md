@@ -1,6 +1,6 @@
 # Phase 2: Tavily Provider
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1-2 days
 **Depends on**: Phase 1
 
@@ -87,9 +87,9 @@ Implement Tavily search provider as the primary search backend. Tavily offers hi
 
 ## Deliverables
 
-- [ ] TavilyProvider implements SearchProvider
-- [ ] All SearchFilters mapped to Tavily params
-- [ ] Errors mapped to SearchError variants
-- [ ] Unit tests with mocked responses
-- [ ] Integration test (feature-gated: `--features integration`)
-- [ ] `cargo test -p gorkd-search` passes
+- [x] TavilyProvider implements SearchProvider
+- [x] All SearchFilters mapped to Tavily params
+- [x] Errors mapped to SearchError variants
+- [x] Unit tests with mocked responses
+- [x] Integration test (feature-gated: `--features integration`)
+- [x] `cargo test -p gorkd-search` passes
