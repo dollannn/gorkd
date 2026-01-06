@@ -5,111 +5,91 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::IdParseError;
 
-const NANOID_LENGTH: usize = 12;
-const JOB_PREFIX: &str = "job_";
-const SOURCE_PREFIX: &str = "src_";
+/// Length of the nanoid suffix for all public IDs.
+pub const NANOID_LENGTH: usize = 12;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct JobId(String);
+/// Macro to define a strongly-typed ID with prefix pattern.
+///
+/// Generates a newtype struct with:
+/// - `new()` - creates ID with nanoid
+/// - `as_str()` - returns the full ID string
+/// - `prefix()` - returns the prefix (e.g., "job_")
+/// - `Clone`, `Debug`, `PartialEq`, `Eq`, `Hash`
+/// - `Serialize`, `Deserialize` (transparent)
+/// - `Display`, `Default`, `FromStr`
+///
+/// # Example
+///
+/// ```ignore
+/// define_id!(JobId, "job_");
+/// define_id!(MessageId, "msg_");
+///
+/// let job = JobId::new();
+/// assert!(job.as_str().starts_with("job_"));
+/// ```
+#[macro_export]
+macro_rules! define_id {
+    ($name:ident, $prefix:literal) => {
+        #[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
+        #[serde(transparent)]
+        pub struct $name(String);
 
-impl JobId {
-    pub fn new() -> Self {
-        Self(format!("{}{}", JOB_PREFIX, nanoid::nanoid!(NANOID_LENGTH)))
-    }
+        impl $name {
+            /// Creates a new ID with a random nanoid suffix.
+            pub fn new() -> Self {
+                Self(format!("{}{}", $prefix, nanoid::nanoid!(NANOID_LENGTH)))
+            }
 
-    pub fn as_str(&self) -> &str {
-        &self.0
-    }
-}
+            /// Returns the full ID as a string slice.
+            pub fn as_str(&self) -> &str {
+                &self.0
+            }
 
-impl Default for JobId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl fmt::Display for JobId {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0)
-    }
-}
-
-impl FromStr for JobId {
-    type Err = IdParseError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if !s.starts_with(JOB_PREFIX) {
-            return Err(IdParseError::InvalidPrefix {
-                expected: JOB_PREFIX.to_string(),
-                got: s.to_string(),
-            });
+            /// Returns the prefix for this ID type.
+            pub const fn prefix() -> &'static str {
+                $prefix
+            }
         }
 
-        let suffix = &s[JOB_PREFIX.len()..];
-        if suffix.len() != NANOID_LENGTH {
-            return Err(IdParseError::InvalidLength {
-                expected: JOB_PREFIX.len() + NANOID_LENGTH,
-                got: s.len(),
-            });
+        impl Default for $name {
+            fn default() -> Self {
+                Self::new()
+            }
         }
 
-        Ok(Self(s.to_string()))
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct SourceId(String);
-
-impl SourceId {
-    pub fn new() -> Self {
-        Self(format!(
-            "{}{}",
-            SOURCE_PREFIX,
-            nanoid::nanoid!(NANOID_LENGTH)
-        ))
-    }
-
-    pub fn as_str(&self) -> &str {
-        &self.0
-    }
-}
-
-impl Default for SourceId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl fmt::Display for SourceId {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0)
-    }
-}
-
-impl FromStr for SourceId {
-    type Err = IdParseError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if !s.starts_with(SOURCE_PREFIX) {
-            return Err(IdParseError::InvalidPrefix {
-                expected: SOURCE_PREFIX.to_string(),
-                got: s.to_string(),
-            });
+        impl fmt::Display for $name {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                write!(f, "{}", self.0)
+            }
         }
 
-        let suffix = &s[SOURCE_PREFIX.len()..];
-        if suffix.len() != NANOID_LENGTH {
-            return Err(IdParseError::InvalidLength {
-                expected: SOURCE_PREFIX.len() + NANOID_LENGTH,
-                got: s.len(),
-            });
-        }
+        impl FromStr for $name {
+            type Err = IdParseError;
 
-        Ok(Self(s.to_string()))
-    }
+            fn from_str(s: &str) -> Result<Self, Self::Err> {
+                if !s.starts_with($prefix) {
+                    return Err(IdParseError::InvalidPrefix {
+                        expected: $prefix.to_string(),
+                        got: s.to_string(),
+                    });
+                }
+
+                let suffix = &s[$prefix.len()..];
+                if suffix.len() != NANOID_LENGTH {
+                    return Err(IdParseError::InvalidLength {
+                        expected: $prefix.len() + NANOID_LENGTH,
+                        got: s.len(),
+                    });
+                }
+
+                Ok(Self(s.to_string()))
+            }
+        }
+    };
 }
+
+define_id!(JobId, "job_");
+define_id!(SourceId, "src_");
 
 #[cfg(test)]
 mod tests {
@@ -118,13 +98,13 @@ mod tests {
     #[test]
     fn job_id_has_correct_prefix() {
         let id = JobId::new();
-        assert!(id.as_str().starts_with("job_"));
+        assert!(id.as_str().starts_with(JobId::prefix()));
     }
 
     #[test]
     fn job_id_has_correct_length() {
         let id = JobId::new();
-        assert_eq!(id.as_str().len(), JOB_PREFIX.len() + NANOID_LENGTH);
+        assert_eq!(id.as_str().len(), JobId::prefix().len() + NANOID_LENGTH);
     }
 
     #[test]
@@ -149,13 +129,13 @@ mod tests {
     #[test]
     fn source_id_has_correct_prefix() {
         let id = SourceId::new();
-        assert!(id.as_str().starts_with("src_"));
+        assert!(id.as_str().starts_with(SourceId::prefix()));
     }
 
     #[test]
     fn source_id_has_correct_length() {
         let id = SourceId::new();
-        assert_eq!(id.as_str().len(), SOURCE_PREFIX.len() + NANOID_LENGTH);
+        assert_eq!(id.as_str().len(), SourceId::prefix().len() + NANOID_LENGTH);
     }
 
     #[test]
@@ -170,7 +150,7 @@ mod tests {
         let id = JobId::new();
         let json = serde_json::to_string(&id).unwrap();
         assert!(json.starts_with('"'));
-        assert!(json.contains("job_"));
+        assert!(json.contains(JobId::prefix()));
     }
 
     #[test]
