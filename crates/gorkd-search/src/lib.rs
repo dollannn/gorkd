@@ -16,4 +16,5 @@ pub use config::{ConfigError, SearchConfig};
 pub use exa::{ExaProvider, SearchType as ExaSearchType};
 pub use gorkd_core::traits::{SearchProvider, SearchResult};
 pub use registry::ProviderRegistry;
+pub use searxng::SearxngProvider;
 pub use tavily::{SearchDepth, TavilyProvider};
