@@ -1,5 +1,8 @@
 # gorkd
 
+> [!CAUTION]
+> This project is **heavily AI-developed** and in **active development**. It is not ready for production use or any serious use. Expect breaking changes, incomplete features, and rough edges.
+
 A truth-seeking research bot. Ask a question, get a cited answer.
 
 Web search + LLM reasoning + source citations. Accessible via web UI, Discord, and Slack.
