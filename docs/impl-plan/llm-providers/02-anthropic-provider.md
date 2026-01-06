@@ -1,6 +1,6 @@
 # Phase 2: Anthropic Provider
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1-2 days
 **Depends on**: Phase 1 (Shared Infrastructure)
 
@@ -69,11 +69,11 @@ Instruct Claude to output structured JSON with claims and source references:
 
 ## Deliverables
 
-- [ ] AnthropicProvider implements LlmProvider trait
-- [ ] Messages API integration working
-- [ ] Proper error mapping (rate limits, auth, network)
-- [ ] Citation extraction from response
-- [ ] Token usage tracked in SynthesisMetadata
-- [ ] Unit tests with mocked HTTP responses
-- [ ] Integration test (skipped without API key)
-- [ ] `cargo test -p gorkd-llm` passes
+- [x] AnthropicProvider implements LlmProvider trait
+- [x] Messages API integration working
+- [x] Proper error mapping (rate limits, auth, network)
+- [x] Citation extraction from response
+- [x] Token usage tracked in SynthesisMetadata
+- [x] Unit tests with mocked HTTP responses
+- [ ] Integration test (skipped without API key) - deferred to integration phase
+- [x] `cargo test -p gorkd-llm` passes

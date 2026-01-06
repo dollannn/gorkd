@@ -8,6 +8,7 @@ pub mod openai;
 pub mod prompt;
 pub mod types;
 
+pub use anthropic::AnthropicProvider;
 pub use client::{build_http_client, build_http_client_with_timeout, default_http_client};
 pub use config::{
     AnthropicConfig, LlmConfig, OpenAiConfig, DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT_SECS,
