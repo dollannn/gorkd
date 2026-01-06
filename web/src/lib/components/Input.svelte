@@ -20,7 +20,7 @@
 		id,
 		name,
 		required = false,
-		oninput
+		oninput,
 	}: Props = $props()
 
 	const generatedId = `input-${Math.random().toString(36).slice(2, 9)}`
@@ -29,7 +29,11 @@
 
 <div class="flex flex-col gap-1.5">
 	{#if label}
-		<label for={inputId} class="text-sm font-medium" style="color: var(--color-text);">
+		<label
+			for={inputId}
+			class="text-sm font-medium"
+			style="color: var(--color-text);"
+		>
 			{label}
 			{#if required}
 				<span style="color: var(--color-error);">*</span>

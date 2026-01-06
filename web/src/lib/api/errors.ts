@@ -34,7 +34,10 @@ export class ApiError extends Error {
 		this.details = details
 	}
 
-	static fromResponse(response: ApiErrorResponse, statusCode: number): ApiError {
+	static fromResponse(
+		response: ApiErrorResponse,
+		statusCode: number
+	): ApiError {
 		const { code, message, details } = response.error
 		return new ApiError(code as ApiErrorCode, message, statusCode, details)
 	}

@@ -12,12 +12,16 @@
 		class?: string
 	}
 
-	const { icon: IconComponent, size = 'md', class: className = '' }: Props = $props()
+	const {
+		icon: IconComponent,
+		size = 'md',
+		class: className = '',
+	}: Props = $props()
 
 	const sizeMap = {
 		sm: 16,
 		md: 20,
-		lg: 24
+		lg: 24,
 	}
 </script>
 

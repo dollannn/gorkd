@@ -8,7 +8,7 @@
 	const sizeClasses = {
 		sm: 'text-lg',
 		md: 'text-2xl',
-		lg: 'text-4xl'
+		lg: 'text-4xl',
 	}
 </script>
 

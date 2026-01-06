@@ -1,5 +1,10 @@
 export { createApiClient, type ApiClient, type ApiClientConfig } from './client'
-export { ApiError, isApiError, type ApiErrorCode, type ApiErrorResponse } from './errors'
+export {
+	ApiError,
+	isApiError,
+	type ApiErrorCode,
+	type ApiErrorResponse,
+} from './errors'
 export type {
 	Answer,
 	AnswerEvent,
@@ -17,5 +22,5 @@ export type {
 	SourceEvent,
 	SourcesResponse,
 	StatusEvent,
-	StreamEvent
+	StreamEvent,
 } from './types'

@@ -11,7 +11,10 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="flex min-h-screen flex-col" style="background-color: var(--color-bg);">
+<div
+	class="flex min-h-screen flex-col"
+	style="background-color: var(--color-bg);"
+>
 	<header
 		class="sticky top-0 z-10 border-b"
 		style="background-color: var(--color-bg); border-color: var(--color-border);"

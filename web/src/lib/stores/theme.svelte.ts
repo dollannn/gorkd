@@ -43,7 +43,7 @@ function createThemeStore() {
 		},
 		set(newTheme: Theme) {
 			theme = newTheme
-		}
+		},
 	}
 }
 

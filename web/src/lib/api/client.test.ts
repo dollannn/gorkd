@@ -7,7 +7,10 @@ describe('ApiClient', () => {
 	let fetchSpy: ReturnType<typeof vi.fn>
 
 	beforeEach(() => {
-		client = createApiClient({ baseUrl: 'http://localhost:4000', timeout: 1000 })
+		client = createApiClient({
+			baseUrl: 'http://localhost:4000',
+			timeout: 1000,
+		})
 		fetchSpy = vi.fn()
 		vi.stubGlobal('fetch', fetchSpy)
 	})
@@ -23,15 +26,17 @@ describe('ApiClient', () => {
 				status: 400,
 				json: () =>
 					Promise.resolve({
-						error: { code: 'INVALID_QUERY', message: 'Query cannot be empty' }
-					})
+						error: { code: 'INVALID_QUERY', message: 'Query cannot be empty' },
+					}),
 			})
 
-			await expect(client.startResearch({ query: '' })).rejects.toThrow(ApiError)
+			await expect(client.startResearch({ query: '' })).rejects.toThrow(
+				ApiError
+			)
 			await expect(client.startResearch({ query: '' })).rejects.toMatchObject({
 				code: 'INVALID_QUERY',
 				message: 'Query cannot be empty',
-				statusCode: 400
+				statusCode: 400,
 			})
 		})
 
@@ -41,13 +46,13 @@ describe('ApiClient', () => {
 				status: 404,
 				json: () =>
 					Promise.resolve({
-						error: { code: 'JOB_NOT_FOUND', message: 'Job not found' }
-					})
+						error: { code: 'JOB_NOT_FOUND', message: 'Job not found' },
+					}),
 			})
 
 			await expect(client.getJob('job_invalid')).rejects.toMatchObject({
 				code: 'JOB_NOT_FOUND',
-				statusCode: 404
+				statusCode: 404,
 			})
 		})
 
@@ -57,13 +62,15 @@ describe('ApiClient', () => {
 				status: 429,
 				json: () =>
 					Promise.resolve({
-						error: { code: 'RATE_LIMITED', message: 'Too many requests' }
-					})
+						error: { code: 'RATE_LIMITED', message: 'Too many requests' },
+					}),
 			})
 
-			await expect(client.startResearch({ query: 'test' })).rejects.toMatchObject({
+			await expect(
+				client.startResearch({ query: 'test' })
+			).rejects.toMatchObject({
 				code: 'RATE_LIMITED',
-				statusCode: 429
+				statusCode: 429,
 			})
 		})
 
@@ -72,7 +79,7 @@ describe('ApiClient', () => {
 
 			await expect(client.health()).rejects.toMatchObject({
 				code: 'NETWORK_ERROR',
-				message: 'Network failure'
+				message: 'Network failure',
 			})
 		})
 
@@ -88,7 +95,7 @@ describe('ApiClient', () => {
 			)
 
 			await expect(client.health()).rejects.toMatchObject({
-				code: 'TIMEOUT'
+				code: 'TIMEOUT',
 			})
 		})
 	})
@@ -98,12 +105,12 @@ describe('ApiClient', () => {
 			const response = {
 				job_id: 'job_abc123',
 				status: 'pending',
-				stream_url: '/v1/jobs/job_abc123/stream'
+				stream_url: '/v1/jobs/job_abc123/stream',
 			}
 			fetchSpy.mockResolvedValue({
 				ok: true,
 				status: 202,
-				json: () => Promise.resolve(response)
+				json: () => Promise.resolve(response),
 			})
 
 			const result = await client.startResearch({ query: 'What is X?' })
@@ -112,7 +119,7 @@ describe('ApiClient', () => {
 				'http://localhost:4000/v1/research',
 				expect.objectContaining({
 					method: 'POST',
-					body: JSON.stringify({ query: 'What is X?' })
+					body: JSON.stringify({ query: 'What is X?' }),
 				})
 			)
 		})
@@ -122,12 +129,16 @@ describe('ApiClient', () => {
 				job_id: 'job_abc123',
 				status: 'completed',
 				query: 'What is X?',
-				answer: { summary: 'X is...', detail: 'Details...', confidence: 'high' }
+				answer: {
+					summary: 'X is...',
+					detail: 'Details...',
+					confidence: 'high',
+				},
 			}
 			fetchSpy.mockResolvedValue({
 				ok: true,
 				status: 200,
-				json: () => Promise.resolve(response)
+				json: () => Promise.resolve(response),
 			})
 
 			const result = await client.getJob('job_abc123')
@@ -136,12 +147,19 @@ describe('ApiClient', () => {
 
 		it('gets sources', async () => {
 			const response = {
-				sources: [{ id: 'src_001', url: 'https://example.com', title: 'Example', domain: 'example.com' }]
+				sources: [
+					{
+						id: 'src_001',
+						url: 'https://example.com',
+						title: 'Example',
+						domain: 'example.com',
+					},
+				],
 			}
 			fetchSpy.mockResolvedValue({
 				ok: true,
 				status: 200,
-				json: () => Promise.resolve(response)
+				json: () => Promise.resolve(response),
 			})
 
 			const result = await client.getSources('job_abc123')
@@ -149,11 +167,15 @@ describe('ApiClient', () => {
 		})
 
 		it('checks health', async () => {
-			const response = { status: 'healthy', version: '0.1.0', uptime_seconds: 3600 }
+			const response = {
+				status: 'healthy',
+				version: '0.1.0',
+				uptime_seconds: 3600,
+			}
 			fetchSpy.mockResolvedValue({
 				ok: true,
 				status: 200,
-				json: () => Promise.resolve(response)
+				json: () => Promise.resolve(response),
 			})
 
 			const result = await client.health()

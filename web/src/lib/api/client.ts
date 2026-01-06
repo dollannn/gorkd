@@ -4,7 +4,7 @@ import type {
 	JobResponse,
 	ResearchRequest,
 	ResearchResponse,
-	SourcesResponse
+	SourcesResponse,
 } from './types'
 
 export interface ApiClientConfig {
@@ -24,7 +24,10 @@ const DEFAULT_TIMEOUT = 30_000
 export function createApiClient(config: ApiClientConfig): ApiClient {
 	const { baseUrl, timeout = DEFAULT_TIMEOUT } = config
 
-	async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+	async function request<T>(
+		path: string,
+		options: RequestInit = {}
+	): Promise<T> {
 		const controller = new AbortController()
 		const timeoutId = setTimeout(() => controller.abort(), timeout)
 
@@ -40,8 +43,8 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
 				signal: controller.signal,
 				headers: {
 					'Content-Type': 'application/json',
-					...options.headers
-				}
+					...options.headers,
+				},
 			})
 
 			const data = await response.json()
@@ -62,17 +65,21 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
 			if (error instanceof DOMException && error.name === 'AbortError') {
 				throw ApiError.timeout()
 			}
-			throw ApiError.networkError(error instanceof Error ? error.message : 'Network error')
+			throw ApiError.networkError(
+				error instanceof Error ? error.message : 'Network error'
+			)
 		} finally {
 			clearTimeout(timeoutId)
 		}
 	}
 
 	return {
-		async startResearch(researchRequest: ResearchRequest): Promise<ResearchResponse> {
+		async startResearch(
+			researchRequest: ResearchRequest
+		): Promise<ResearchResponse> {
 			return request<ResearchResponse>('/v1/research', {
 				method: 'POST',
-				body: JSON.stringify(researchRequest)
+				body: JSON.stringify(researchRequest),
 			})
 		},
 
@@ -86,6 +93,6 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
 
 		async health(): Promise<HealthResponse> {
 			return request<HealthResponse>('/v1/health')
-		}
+		},
 	}
 }

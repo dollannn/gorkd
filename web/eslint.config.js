@@ -25,6 +25,12 @@ export default ts.config(
 				parser: ts.parser,
 			},
 		},
+		rules: {
+			'svelte/no-navigation-without-resolve': [
+				'error',
+				{ ignoreLinks: true, ignoreGoto: true },
+			],
+		},
 	},
 	{
 		files: ['**/*.svelte.ts', '**/*.svelte.js'],
@@ -33,6 +39,9 @@ export default ts.config(
 			parserOptions: {
 				project: true,
 			},
+		},
+		rules: {
+			'svelte/no-navigation-without-resolve': ['error', { ignoreGoto: true }],
 		},
 	},
 	{

@@ -31,8 +31,10 @@
 	--space-16: 4rem;
 
 	/* Typography */
-	--font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-	--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+	--font-sans:
+		system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	--font-mono:
+		ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
 	/* Border Radius */
 	--radius-sm: 0.25rem;
