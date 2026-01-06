@@ -21,4 +21,8 @@ chrono.workspace = true
 uuid.workspace = true
 nanoid.workspace = true
 
+# Async traits
+async-trait.workspace = true
+
 [dev-dependencies]
+tokio = { workspace = true, features = ["rt", "macros"] }
