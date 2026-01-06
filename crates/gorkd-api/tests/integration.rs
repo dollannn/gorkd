@@ -19,18 +19,34 @@ fn create_test_app() -> TestServer {
 
 #[cfg(feature = "integration")]
 fn create_real_provider_app() -> Option<TestServer> {
+    use gorkd_llm::{LlmConfig, LlmRegistry};
     use gorkd_search::{ProviderRegistry, SearchConfig};
 
-    let config = SearchConfig::from_env().ok()?;
-    let registry = ProviderRegistry::from_config(&config);
+    let search_config = SearchConfig::from_env().ok()?;
+    let search_registry = ProviderRegistry::from_config(&search_config);
 
-    if registry.is_empty() {
+    if search_registry.is_empty() {
         return None;
     }
 
+    let llm_config = LlmConfig::from_env();
+    if !llm_config.has_provider() {
+        return None;
+    }
+
+    let http = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(60))
+        .build()
+        .expect("failed to create HTTP client");
+
+    let llm_registry = LlmRegistry::from_config(http, &llm_config);
+
     let store = Arc::new(MockStore::new());
-    let llm_provider = Arc::new(MockLlmProvider::new("mock-gpt-4"));
-    let state = Arc::new(AppState::with_registry(store, registry, llm_provider));
+    let state = Arc::new(AppState::with_registries(
+        store,
+        search_registry,
+        llm_registry,
+    ));
 
     Some(TestServer::new(app(state)).unwrap())
 }
@@ -188,7 +204,7 @@ mod real_provider_tests {
     #[tokio::test]
     async fn test_research_with_real_providers() {
         let Some(server) = create_real_provider_app() else {
-            eprintln!("Skipping: no search providers configured");
+            eprintln!("Skipping: no providers configured");
             return;
         };
 
@@ -203,7 +219,9 @@ mod real_provider_tests {
         let job_id = body["job_id"].as_str().unwrap();
 
         let mut completed = false;
-        for _ in 0..60 {
+        let mut final_job: Option<Value> = None;
+
+        for _ in 0..120 {
             tokio::time::sleep(Duration::from_millis(500)).await;
 
             let response = server.get(&format!("/v1/jobs/{}", job_id)).await;
@@ -212,6 +230,7 @@ mod real_provider_tests {
             match job["status"].as_str() {
                 Some("completed") => {
                     completed = true;
+                    final_job = Some(job);
                     break;
                 }
                 Some("failed") => {
@@ -224,7 +243,18 @@ mod real_provider_tests {
             }
         }
 
-        assert!(completed, "Pipeline did not complete within 30s timeout");
+        assert!(completed, "Pipeline did not complete within 60s timeout");
+
+        let job = final_job.expect("should have final job");
+        assert!(job["answer"].is_object(), "should have answer");
+        assert!(
+            job["answer"]["summary"].as_str().is_some(),
+            "answer should have summary"
+        );
+        assert!(
+            job["answer"]["detail"].as_str().is_some(),
+            "answer should have detail"
+        );
 
         let sources_response = server.get(&format!("/v1/jobs/{}/sources", job_id)).await;
         sources_response.assert_status_ok();
@@ -243,9 +273,72 @@ mod real_provider_tests {
     }
 
     #[tokio::test]
+    async fn test_research_validates_answer_citations() {
+        let Some(server) = create_real_provider_app() else {
+            eprintln!("Skipping: no providers configured");
+            return;
+        };
+
+        let response = server
+            .post("/v1/research")
+            .json(&json!({"query": "What are the key features of Rust's ownership system?"}))
+            .await;
+
+        response.assert_status(axum::http::StatusCode::ACCEPTED);
+
+        let body: Value = response.json();
+        let job_id = body["job_id"].as_str().unwrap();
+
+        let mut final_job: Option<Value> = None;
+        for _ in 0..120 {
+            tokio::time::sleep(Duration::from_millis(500)).await;
+
+            let response = server.get(&format!("/v1/jobs/{}", job_id)).await;
+            let job: Value = response.json();
+
+            match job["status"].as_str() {
+                Some("completed") => {
+                    final_job = Some(job);
+                    break;
+                }
+                Some("failed") => {
+                    panic!(
+                        "Pipeline failed: {:?}",
+                        job["error_message"].as_str().unwrap_or("unknown")
+                    );
+                }
+                _ => continue,
+            }
+        }
+
+        let job = final_job.expect("should complete within timeout");
+
+        let sources_response = server.get(&format!("/v1/jobs/{}/sources", job_id)).await;
+        let sources: Value = sources_response.json();
+        let source_ids: std::collections::HashSet<_> = sources["sources"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|s| s["id"].as_str())
+            .collect();
+
+        if let Some(citations) = job["answer"]["citations"].as_array() {
+            for citation in citations {
+                if let Some(source_id) = citation["source_id"].as_str() {
+                    assert!(
+                        source_ids.contains(source_id),
+                        "citation source_id '{}' not in sources",
+                        source_id
+                    );
+                }
+            }
+        }
+    }
+
+    #[tokio::test]
     async fn test_provider_fallback_on_invalid_query() {
         let Some(server) = create_real_provider_app() else {
-            eprintln!("Skipping: no search providers configured");
+            eprintln!("Skipping: no providers configured");
             return;
         };
 

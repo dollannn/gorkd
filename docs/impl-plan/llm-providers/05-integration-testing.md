@@ -1,6 +1,6 @@
 # Phase 5: Integration Testing
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1 day
 **Depends on**: Phase 4
 
@@ -73,13 +73,13 @@ async fn anthropic_synthesizes_answer() {
 
 ## Deliverables
 
-- [ ] Test fixtures with sample sources
-- [ ] Anthropic integration test passing
-- [ ] OpenAI integration test passing
-- [ ] Fallback behavior verified
-- [ ] Citation extraction validated
-- [ ] Error scenarios covered
-- [ ] `.env.example` updated with all variables
-- [ ] Documentation for running integration tests
-- [ ] `cargo test -p gorkd-llm` passes (unit tests)
-- [ ] `cargo test -p gorkd-llm -- --ignored` passes (with keys)
+- [x] Test fixtures with sample sources
+- [x] Anthropic integration test passing
+- [x] OpenAI integration test passing
+- [x] Fallback behavior verified
+- [x] Citation extraction validated
+- [x] Error scenarios covered
+- [x] `.env.example` updated with all variables
+- [x] Documentation for running integration tests
+- [x] `cargo test -p gorkd-llm` passes (unit tests)
+- [x] `cargo test -p gorkd-llm -- --ignored` passes (with keys)
