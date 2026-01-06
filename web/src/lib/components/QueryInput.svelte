@@ -8,6 +8,7 @@
 		maxLength?: number
 		loading?: boolean
 		disabled?: boolean
+		apiUnavailable?: boolean
 		onsubmit?: (query: string) => void
 	}
 
@@ -17,6 +18,7 @@
 		maxLength = 2000,
 		loading = false,
 		disabled = false,
+		apiUnavailable = false,
 		onsubmit,
 	}: Props = $props()
 
@@ -25,7 +27,7 @@
 	const charCount = $derived(value.length)
 	const isOverLimit = $derived(charCount > maxLength)
 	const isEmpty = $derived(value.trim().length === 0)
-	const canSubmit = $derived(!isEmpty && !isOverLimit && !loading && !disabled)
+	const canSubmit = $derived(!isEmpty && !isOverLimit && !loading && !disabled && !apiUnavailable)
 
 	function handleKeydown(event: KeyboardEvent) {
 		if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {

@@ -92,7 +92,7 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
 		},
 
 		async health(): Promise<HealthResponse> {
-			return request<HealthResponse>('/v1/health')
+			return request<HealthResponse>('/health')
 		},
 	}
 }
