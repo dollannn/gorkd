@@ -1,6 +1,6 @@
 # Phase 3: Core Layout
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1 day
 **Depends on**: Phase 1 (Project Scaffolding)
 
@@ -28,7 +28,7 @@ Build the app shell, design tokens, and base UI components. Establish visual lan
 | File | Changes |
 |------|---------|
 | `web/src/app.css` | Design tokens, dark mode variables |
-| `web/src/routes/+layout.svelte` | **New file** - App shell |
+| `web/src/routes/+layout.svelte` | **Modified** - App shell |
 | `web/src/lib/components/Logo.svelte` | **New file** - Brand mark |
 | `web/src/lib/components/Button.svelte` | **New file** - Button variants |
 | `web/src/lib/components/Input.svelte` | **New file** - Form input |
@@ -109,10 +109,10 @@ interface ButtonProps {
 
 ## Deliverables
 
-- [ ] Design tokens defined in app.css
-- [ ] Dark/light mode toggle works
-- [ ] Theme persists across page reload
-- [ ] All base components render correctly
-- [ ] App shell displays with header/footer
-- [ ] Components work in both themes
-- [ ] No layout shift on theme change
+- [x] Design tokens defined in app.css
+- [x] Dark/light mode toggle works
+- [x] Theme persists across page reload
+- [x] All base components render correctly
+- [x] App shell displays with header/footer
+- [x] Components work in both themes
+- [x] No layout shift on theme change

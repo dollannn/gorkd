@@ -27,6 +27,15 @@ export default ts.config(
 		},
 	},
 	{
+		files: ['**/*.svelte.ts', '**/*.svelte.js'],
+		languageOptions: {
+			parser: ts.parser,
+			parserOptions: {
+				project: true,
+			},
+		},
+	},
+	{
 		ignores: ['build/', '.svelte-kit/', 'dist/'],
 	}
 )
