@@ -12,4 +12,16 @@ export default defineConfig({
 	resolve: {
 		conditions: ['browser'],
 	},
+	server: {
+		proxy: {
+			'/health': {
+				target: 'http://localhost:4000',
+				changeOrigin: true,
+			},
+			'/v1': {
+				target: 'http://localhost:4000',
+				changeOrigin: true,
+			},
+		},
+	},
 })
