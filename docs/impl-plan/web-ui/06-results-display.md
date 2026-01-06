@@ -1,6 +1,6 @@
 # Phase 6: Results Display
 
-**Status**: Planned
+**Status**: Completed
 **Duration**: ~1-1.5 days
 **Depends on**: Phase 5 (SSE Streaming)
 
@@ -121,14 +121,14 @@ Citations appear as `[1]` links in text:
 
 ## Deliverables
 
-- [ ] Answer displays with formatted citations
-- [ ] Citation hover shows source preview
-- [ ] Citation click scrolls to source
-- [ ] Confidence badge shows correct level/color
-- [ ] Limitations list renders if present
-- [ ] Sources panel shows all sources
-- [ ] Sources indicate if used in citations
-- [ ] Metadata bar shows duration/count/cached
-- [ ] Share button copies URL to clipboard
-- [ ] New Research button returns to home
-- [ ] Layout works on mobile (responsive)
+- [x] Answer displays with formatted citations
+- [x] Citation hover shows source preview
+- [x] Citation click scrolls to source
+- [x] Confidence badge shows correct level/color
+- [x] Limitations list renders if present
+- [x] Sources panel shows all sources
+- [x] Sources indicate if used in citations
+- [x] Metadata bar shows duration/count/cached
+- [x] Share button copies URL to clipboard
+- [x] New Research button returns to home
+- [x] Layout works on mobile (responsive)
