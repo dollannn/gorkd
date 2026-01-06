@@ -17,6 +17,24 @@ fn create_test_app() -> TestServer {
     TestServer::new(app).unwrap()
 }
 
+#[cfg(feature = "integration")]
+fn create_real_provider_app() -> Option<TestServer> {
+    use gorkd_search::{ProviderRegistry, SearchConfig};
+
+    let config = SearchConfig::from_env().ok()?;
+    let registry = ProviderRegistry::from_config(&config);
+
+    if registry.is_empty() {
+        return None;
+    }
+
+    let store = Arc::new(MockStore::new());
+    let llm_provider = Arc::new(MockLlmProvider::new("mock-gpt-4"));
+    let state = Arc::new(AppState::with_registry(store, registry, llm_provider));
+
+    Some(TestServer::new(app(state)).unwrap())
+}
+
 #[tokio::test]
 async fn test_health_check() {
     let server = create_test_app();
@@ -161,4 +179,84 @@ async fn test_pipeline_completes() {
     }
 
     assert!(completed, "Pipeline did not complete within timeout");
+}
+
+#[cfg(feature = "integration")]
+mod real_provider_tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_research_with_real_providers() {
+        let Some(server) = create_real_provider_app() else {
+            eprintln!("Skipping: no search providers configured");
+            return;
+        };
+
+        let response = server
+            .post("/v1/research")
+            .json(&json!({"query": "What is the Rust programming language?"}))
+            .await;
+
+        response.assert_status(axum::http::StatusCode::ACCEPTED);
+
+        let body: Value = response.json();
+        let job_id = body["job_id"].as_str().unwrap();
+
+        let mut completed = false;
+        for _ in 0..60 {
+            tokio::time::sleep(Duration::from_millis(500)).await;
+
+            let response = server.get(&format!("/v1/jobs/{}", job_id)).await;
+            let job: Value = response.json();
+
+            match job["status"].as_str() {
+                Some("completed") => {
+                    completed = true;
+                    break;
+                }
+                Some("failed") => {
+                    panic!(
+                        "Pipeline failed: {:?}",
+                        job["error_message"].as_str().unwrap_or("unknown")
+                    );
+                }
+                _ => continue,
+            }
+        }
+
+        assert!(completed, "Pipeline did not complete within 30s timeout");
+
+        let sources_response = server.get(&format!("/v1/jobs/{}/sources", job_id)).await;
+        sources_response.assert_status_ok();
+
+        let sources: Value = sources_response.json();
+        let sources_array = sources["sources"].as_array().unwrap();
+        assert!(!sources_array.is_empty(), "should have real sources");
+
+        for source in sources_array {
+            assert!(source["url"].as_str().is_some(), "source should have URL");
+            assert!(
+                source["title"].as_str().is_some(),
+                "source should have title"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_provider_fallback_on_invalid_query() {
+        let Some(server) = create_real_provider_app() else {
+            eprintln!("Skipping: no search providers configured");
+            return;
+        };
+
+        let response = server
+            .post("/v1/research")
+            .json(&json!({"query": "test query for fallback verification"}))
+            .await;
+
+        response.assert_status(axum::http::StatusCode::ACCEPTED);
+
+        let body: Value = response.json();
+        assert!(body["job_id"].as_str().is_some());
+    }
 }

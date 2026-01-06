@@ -2,7 +2,7 @@ use std::fmt;
 
 use thiserror::Error;
 
-#[derive(Debug, Error)]
+#[derive(Debug, Clone, Error)]
 #[non_exhaustive]
 pub enum SearchError {
     #[error("provider not available: {provider}")]

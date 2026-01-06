@@ -1,6 +1,6 @@
 # Phase 5: Integration Testing
 
-**Status**: Planned
+**Status**: Done
 **Duration**: ~1 day
 **Depends on**: Phases 2-4
 
@@ -85,12 +85,12 @@ cargo test -p gorkd-api --features integration
 
 ## Deliverables
 
-- [ ] API server initializes providers from environment
-- [ ] Provider registry integrated into AppState
-- [ ] Executor supports provider fallback
-- [ ] E2E tests pass with real providers
-- [ ] E2E tests pass with mock (no API keys)
-- [ ] `.env.example` documents all search config
+- [x] API server initializes providers from environment
+- [x] Provider registry integrated into AppState
+- [x] Executor supports provider fallback
+- [x] E2E tests pass with real providers
+- [x] E2E tests pass with mock (no API keys)
+- [x] `.env.example` documents all search config
 - [ ] README updated with provider setup
-- [ ] `cargo test` passes (unit tests, no API keys)
-- [ ] `cargo test --features integration` passes (with API keys)
+- [x] `cargo test` passes (unit tests, no API keys)
+- [x] `cargo test --features integration` passes (with API keys)

@@ -3,6 +3,7 @@ use std::sync::Arc;
 
 use gorkd_api::{app, AppState};
 use gorkd_core::{MockLlmProvider, MockSearchProvider, MockStore};
+use gorkd_search::{ProviderRegistry, SearchConfig};
 use tokio::signal;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -19,10 +20,23 @@ async fn main() {
         .unwrap_or(4000);
 
     let store = Arc::new(MockStore::new());
-    let search_provider = Arc::new(MockSearchProvider::new("mock-tavily"));
     let llm_provider = Arc::new(MockLlmProvider::new("mock-gpt-4"));
 
-    let state = Arc::new(AppState::new(store, search_provider, llm_provider));
+    let state = match SearchConfig::from_env() {
+        Ok(config) => {
+            let registry = ProviderRegistry::from_config(&config);
+            tracing::info!(
+                providers = ?registry.list(),
+                "initialized search providers from environment"
+            );
+            Arc::new(AppState::with_registry(store, registry, llm_provider))
+        }
+        Err(_) => {
+            tracing::warn!("no search providers configured, using mock provider");
+            let search_provider = Arc::new(MockSearchProvider::new("mock-tavily"));
+            Arc::new(AppState::new(store, search_provider, llm_provider))
+        }
+    };
 
     let app = app(state);
 

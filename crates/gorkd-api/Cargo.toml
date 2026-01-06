@@ -16,6 +16,7 @@ path = "src/main.rs"
 
 [dependencies]
 gorkd-core.workspace = true
+gorkd-search.workspace = true
 
 axum.workspace = true
 tokio = { workspace = true, features = ["signal"] }
@@ -36,6 +37,9 @@ tracing-subscriber.workspace = true
 
 thiserror.workspace = true
 chrono.workspace = true
+
+[features]
+integration = []
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
