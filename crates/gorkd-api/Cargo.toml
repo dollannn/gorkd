@@ -6,34 +6,35 @@ edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
 
+[lib]
+name = "gorkd_api"
+path = "src/lib.rs"
+
 [[bin]]
 name = "gorkd-api"
 path = "src/main.rs"
 
 [dependencies]
-# Internal
 gorkd-core.workspace = true
-gorkd-search.workspace = true
-gorkd-llm.workspace = true
-gorkd-store.workspace = true
 
-# Web framework
 axum.workspace = true
+tokio = { workspace = true, features = ["signal"] }
+tokio-stream.workspace = true
+futures.workspace = true
 tower.workspace = true
 tower-http.workspace = true
 
-# Async runtime
-tokio.workspace = true
-
-# Serialization
 serde.workspace = true
 serde_json.workspace = true
 
-# Logging
+utoipa.workspace = true
+utoipa-axum.workspace = true
+utoipa-scalar.workspace = true
+
 tracing.workspace = true
 tracing-subscriber.workspace = true
 
-# Error handling
-anyhow.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
 
 [dev-dependencies]

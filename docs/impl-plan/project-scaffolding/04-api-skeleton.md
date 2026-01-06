@@ -1,6 +1,6 @@
 # Phase 4: API Skeleton
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1-2 days
 **Depends on**: Phase 3
 
@@ -233,12 +233,12 @@ pub fn app(state: Arc<AppState>) -> Router {
 
 ## Deliverables
 
-- [ ] `cargo run -p gorkd-api` starts server on port 4000
-- [ ] `curl localhost:4000/health` returns healthy
-- [ ] `curl -X POST localhost:4000/v1/research -d '{"query":"test"}'` returns job_id
-- [ ] `curl localhost:4000/v1/jobs/job_xxx` returns job (or 404)
-- [ ] Invalid requests return proper error format
-- [ ] Logs show request/response info
-- [ ] `curl localhost:4000/docs/openapi.json` returns valid OpenAPI 3.1 spec
-- [ ] Scalar UI accessible at `http://localhost:4000/docs`
-- [ ] All endpoints documented with request/response schemas
+- [x] `cargo run -p gorkd-api` starts server on port 4000
+- [x] `curl localhost:4000/health` returns healthy
+- [x] `curl -X POST localhost:4000/v1/research -d '{"query":"test"}'` returns job_id
+- [x] `curl localhost:4000/v1/jobs/job_xxx` returns job (or 404)
+- [x] Invalid requests return proper error format
+- [x] Logs show request/response info
+- [x] `curl localhost:4000/docs/openapi.json` returns valid OpenAPI 3.1 spec
+- [x] Scalar UI accessible at `http://localhost:4000/docs`
+- [x] All endpoints documented with request/response schemas
