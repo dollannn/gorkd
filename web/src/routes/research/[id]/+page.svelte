@@ -1,10 +1,20 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onMount, onDestroy } from 'svelte'
 	import { goto } from '$app/navigation'
 	import { resolveRoute } from '$app/paths'
-	import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-svelte'
-	import { Card, Button, Spinner } from '$lib/components'
-	import { researchStore } from '$lib/stores/research.svelte'
+	import { AlertCircle, ArrowLeft } from 'lucide-svelte'
+	import {
+		Card,
+		Button,
+		Spinner,
+		ProgressStages,
+		SourcePreview,
+		StreamingIndicator,
+	} from '$lib/components'
+	import {
+		researchStore,
+		type PipelineStage,
+	} from '$lib/stores/research.svelte'
 
 	interface Props {
 		data: { jobId: string }
@@ -16,15 +26,43 @@
 		researchStore.loadJob(data.jobId)
 	})
 
+	onDestroy(() => {
+		researchStore.disconnectStream()
+	})
+
 	function handleBack() {
 		researchStore.reset()
 		goto(resolveRoute('/'))
+	}
+
+	function handleRetryConnection() {
+		researchStore.connectStream(data.jobId)
 	}
 
 	const isLoading = $derived(researchStore.state === 'submitting')
 	const isStreaming = $derived(researchStore.state === 'streaming')
 	const isCompleted = $derived(researchStore.state === 'completed')
 	const isError = $derived(researchStore.state === 'error')
+
+	const currentStage = $derived<PipelineStage>(
+		researchStore.streamingProgress?.stage ?? 'pending'
+	)
+	const progressMessage = $derived(researchStore.streamingProgress?.message)
+	const progressValue = $derived(researchStore.streamingProgress?.progress)
+
+	const showConnectionIndicator = $derived(
+		isStreaming && researchStore.connectionState !== 'disconnected'
+	)
+
+	const recentSources = $derived(
+		researchStore.streamingSources.slice(-5).reverse()
+	)
+
+	const allSources = $derived(
+		isCompleted
+			? (researchStore.job?.sources ?? [])
+			: researchStore.streamingSources
+	)
 </script>
 
 <svelte:head>
@@ -32,15 +70,24 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<button
-		type="button"
-		onclick={handleBack}
-		class="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
-		style="color: var(--color-text-muted);"
-	>
-		<ArrowLeft class="h-4 w-4" />
-		New research
-	</button>
+	<div class="flex items-center justify-between">
+		<button
+			type="button"
+			onclick={handleBack}
+			class="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
+			style="color: var(--color-text-muted);"
+		>
+			<ArrowLeft class="h-4 w-4" />
+			New research
+		</button>
+
+		{#if showConnectionIndicator}
+			<StreamingIndicator
+				state={researchStore.connectionState}
+				onRetry={handleRetryConnection}
+			/>
+		{/if}
+	</div>
 
 	{#if isLoading}
 		<Card>
@@ -78,22 +125,35 @@
 		</Card>
 	{:else if isStreaming || isCompleted}
 		<Card>
-			<div class="space-y-4">
+			<div class="space-y-6">
 				<h2 class="text-lg font-semibold" style="color: var(--color-text);">
 					{researchStore.job?.query}
 				</h2>
 
-				{#if isStreaming}
-					<div class="flex items-center gap-3 py-8">
-						<Loader2
-							class="h-5 w-5 animate-spin"
-							style="color: var(--color-accent);"
-						/>
-						<span style="color: var(--color-text-muted);">
-							{researchStore.job?.progress?.message ?? 'Researching...'}
-						</span>
+				<ProgressStages
+					{currentStage}
+					message={progressMessage}
+					progress={progressValue}
+				/>
+
+				{#if isStreaming && researchStore.streamingAnswer}
+					<div
+						class="rounded-lg border-l-4 p-4"
+						style="background-color: var(--color-bg-subtle); border-color: var(--color-accent);"
+					>
+						<p
+							class="text-sm font-medium"
+							style="color: var(--color-text-muted);"
+						>
+							Preview
+						</p>
+						<p class="mt-1" style="color: var(--color-text);">
+							{researchStore.streamingAnswer.summary}
+						</p>
 					</div>
-				{:else if isCompleted && researchStore.job?.answer}
+				{/if}
+
+				{#if isCompleted && researchStore.job?.answer}
 					<div class="space-y-4">
 						<div
 							class="rounded-lg p-4"
@@ -146,10 +206,34 @@
 			</div>
 		</Card>
 
-		{#if isCompleted && researchStore.job?.sources?.length}
+		{#if isStreaming && recentSources.length > 0}
+			<Card title="Sources found">
+				<div class="space-y-2">
+					{#each recentSources as source, index (source.id)}
+						<SourcePreview
+							id={source.id}
+							url={source.url}
+							title={source.title}
+							relevance={source.relevance}
+							isNew={index === 0}
+						/>
+					{/each}
+				</div>
+				{#if researchStore.streamingSources.length > 5}
+					<p
+						class="mt-3 text-center text-sm"
+						style="color: var(--color-text-muted);"
+					>
+						+{researchStore.streamingSources.length - 5} more sources
+					</p>
+				{/if}
+			</Card>
+		{/if}
+
+		{#if isCompleted && allSources.length > 0}
 			<Card title="Sources">
 				<ul class="space-y-3">
-					{#each researchStore.job.sources as source (source.id)}
+					{#each allSources as source (source.id)}
 						{@const externalUrl = source.url}
 						<li class="flex flex-col gap-1">
 							<a
@@ -162,7 +246,9 @@
 								{source.title}
 							</a>
 							<span class="text-sm" style="color: var(--color-text-muted);">
-								{source.domain}
+								{'domain' in source
+									? source.domain
+									: new URL(source.url).hostname}
 							</span>
 						</li>
 					{/each}

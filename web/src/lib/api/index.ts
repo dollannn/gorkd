@@ -5,6 +5,13 @@ export {
 	type ApiErrorCode,
 	type ApiErrorResponse,
 } from './errors'
+export {
+	createResearchStream,
+	type ConnectionState,
+	type ResearchStream,
+	type StreamCallbacks,
+	type StreamConfig,
+} from './stream'
 export type {
 	Answer,
 	AnswerEvent,

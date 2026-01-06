@@ -1,6 +1,6 @@
 # Phase 5: SSE Streaming
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1 day
 **Depends on**: Phase 4 (Query Flow)
 
@@ -104,11 +104,11 @@ const RETRY_DELAYS = [1000, 2000, 5000] // ms
 
 ## Deliverables
 
-- [ ] SSE client connects to stream endpoint
-- [ ] Status events update progress stages
-- [ ] Source events add cards in real-time
-- [ ] Answer event shows summary preview
-- [ ] Complete event transitions to results
-- [ ] Reconnection works on disconnect
-- [ ] Error state shown after max retries
-- [ ] Stream cleaned up on navigation away
+- [x] SSE client connects to stream endpoint
+- [x] Status events update progress stages
+- [x] Source events add cards in real-time
+- [x] Answer event shows summary preview
+- [x] Complete event transitions to results
+- [x] Reconnection works on disconnect
+- [x] Error state shown after max retries
+- [x] Stream cleaned up on navigation away
