@@ -17,7 +17,8 @@ thiserror.workspace = true
 # Time
 chrono.workspace = true
 
-# UUID
+# UUID / ID generation
 uuid.workspace = true
+nanoid.workspace = true
 
 [dev-dependencies]

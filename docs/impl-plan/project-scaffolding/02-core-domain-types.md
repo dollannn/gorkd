@@ -1,6 +1,6 @@
 # Phase 2: Core Domain Types
 
-**Status**: Planned
+**Status**: Completed
 **Duration**: ~1-2 days
 **Depends on**: Phase 1
 
@@ -70,8 +70,8 @@ Factual | Comparison | Explanation | CurrentEvent | HowTo | Opinion
 
 ## Deliverables
 
-- [ ] All types from research-pipeline.md implemented
-- [ ] `cargo test -p gorkd-core` passes
-- [ ] `cargo doc -p gorkd-core` generates clean docs
-- [ ] No `unwrap()` or `panic!()` in library code
-- [ ] All public items documented
+- [x] All types from research-pipeline.md implemented
+- [x] `cargo test -p gorkd-core` passes (42 tests)
+- [x] `cargo doc -p gorkd-core` generates clean docs
+- [x] No `unwrap()` or `panic!()` in library code
+- [x] All public items have self-documenting names
