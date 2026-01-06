@@ -61,6 +61,7 @@
 			{disabled}
 			rows={3}
 			onkeydown={handleKeydown}
+			data-search-input
 			class="w-full resize-none rounded-lg border p-4 pr-10 text-base transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1"
 			class:border-error={isOverLimit}
 			style="

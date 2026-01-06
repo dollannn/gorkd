@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte'
-	import { AlertCircle } from 'lucide-svelte'
 	import {
 		Card,
-		Button,
-		Spinner,
 		ProgressStages,
 		SourcePreview,
 		StreamingIndicator,
@@ -15,6 +12,9 @@
 		MetadataBar,
 		ShareButton,
 		NewQueryButton,
+		ErrorState,
+		AnswerSkeleton,
+		SourceSkeleton,
 	} from '$lib/components'
 	import {
 		researchStore,
@@ -53,6 +53,24 @@
 			setTimeout(() => {
 				highlightedSourceId = null
 			}, 2000)
+		}
+	}
+
+	function getErrorType(code: string | undefined) {
+		switch (code) {
+			case 'NETWORK_ERROR':
+			case 'TIMEOUT':
+				return 'network' as const
+			case 'JOB_NOT_FOUND':
+				return 'not_found' as const
+			case 'RATE_LIMITED':
+				return 'rate_limited' as const
+			case 'SEARCH_FAILED':
+				return 'search_failed' as const
+			case 'LLM_FAILED':
+				return 'llm_failed' as const
+			default:
+				return 'generic' as const
 		}
 	}
 
@@ -111,36 +129,17 @@
 	{/if}
 
 	{#if isLoading}
-		<Card>
-			<div class="flex flex-col items-center gap-4 py-12">
-				<Spinner size="lg" />
-				<p style="color: var(--color-text-muted);">Loading research...</p>
-			</div>
-		</Card>
+		<div class="space-y-6">
+			<AnswerSkeleton />
+			<SourceSkeleton count={3} />
+		</div>
 	{:else if isError && researchStore.error}
-		<Card>
-			<div class="flex flex-col items-center gap-4 py-8 text-center">
-				<AlertCircle class="h-12 w-12" style="color: var(--color-error);" />
-				<div class="space-y-2">
-					<h2 class="text-lg font-semibold" style="color: var(--color-text);">
-						{researchStore.error.code === 'JOB_NOT_FOUND'
-							? 'Research not found'
-							: 'Something went wrong'}
-					</h2>
-					<p style="color: var(--color-text-muted);">
-						{researchStore.error.message}
-					</p>
-				</div>
-				<div class="flex gap-3">
-					<NewQueryButton onReset={handleReset} />
-					{#if researchStore.error.code !== 'JOB_NOT_FOUND'}
-						<Button variant="primary" onclick={() => researchStore.retry()}
-							>Try again</Button
-						>
-					{/if}
-				</div>
-			</div>
-		</Card>
+		<ErrorState
+			type={getErrorType(researchStore.error.code)}
+			message={researchStore.error.message}
+			onRetry={() => researchStore.retry()}
+			onNewQuery={handleReset}
+		/>
 	{:else if isStreaming}
 		<Card>
 			<div class="space-y-6">

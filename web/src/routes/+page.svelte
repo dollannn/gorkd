@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/components'
+	import { Card, ErrorState } from '$lib/components'
 	import QueryInput from '$lib/components/QueryInput.svelte'
 	import ExampleQueries from '$lib/components/ExampleQueries.svelte'
 	import { researchStore } from '$lib/stores/research.svelte'
@@ -15,7 +15,23 @@
 	function handleExampleSelect(example: string) {
 		query = example
 	}
+
+	function getErrorType(code: string | undefined) {
+		switch (code) {
+			case 'NETWORK_ERROR':
+			case 'TIMEOUT':
+				return 'network' as const
+			case 'RATE_LIMITED':
+				return 'rate_limited' as const
+			default:
+				return 'generic' as const
+		}
+	}
 </script>
+
+<svelte:head>
+	<title>gorkd - Research anything</title>
+</svelte:head>
 
 <div class="space-y-8">
 	<section class="text-center">
@@ -38,20 +54,10 @@
 	<ExampleQueries onselect={handleExampleSelect} />
 
 	{#if researchStore.state === 'error' && researchStore.error}
-		<Card>
-			<div class="flex flex-col items-center gap-4 py-4 text-center">
-				<p style="color: var(--color-error);">
-					{researchStore.error.message}
-				</p>
-				<button
-					type="button"
-					onclick={() => researchStore.retry()}
-					class="rounded-md px-4 py-2 text-sm font-medium transition-colors"
-					style="background-color: var(--color-accent); color: white;"
-				>
-					Try again
-				</button>
-			</div>
-		</Card>
+		<ErrorState
+			type={getErrorType(researchStore.error.code)}
+			message={researchStore.error.message}
+			onRetry={() => researchStore.retry()}
+		/>
 	{/if}
 </div>
