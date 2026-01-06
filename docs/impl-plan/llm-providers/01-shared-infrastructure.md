@@ -1,6 +1,6 @@
 # Phase 1: Shared Infrastructure
 
-**Status**: Planned
+**Status**: Complete
 **Duration**: ~1 day
 **Depends on**: None
 
@@ -57,10 +57,10 @@ LlmConfig
 
 ## Deliverables
 
-- [ ] Config loads from environment variables
-- [ ] API keys are protected with `SecretString`
-- [ ] HTTP client has timeout and retry configured
-- [ ] Common message types defined
-- [ ] Synthesis prompt template complete
-- [ ] Unit tests for config parsing
-- [ ] `cargo build -p gorkd-llm` passes
+- [x] Config loads from environment variables
+- [x] API keys are protected with `SecretString`
+- [x] HTTP client has timeout and retry configured
+- [x] Common message types defined
+- [x] Synthesis prompt template complete
+- [x] Unit tests for config parsing
+- [x] `cargo build -p gorkd-llm` passes

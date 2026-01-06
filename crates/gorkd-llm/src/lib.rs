@@ -1,9 +1,20 @@
 #![forbid(unsafe_code)]
-#![warn(missing_docs)]
 
-//! LLM provider implementations (OpenAI, Anthropic).
-
-/// Anthropic (Claude) provider.
 pub mod anthropic;
-/// OpenAI (GPT) provider.
+pub mod client;
+pub mod config;
+pub mod error;
 pub mod openai;
+pub mod prompt;
+pub mod types;
+
+pub use client::{build_http_client, build_http_client_with_timeout, default_http_client};
+pub use config::{
+    AnthropicConfig, LlmConfig, OpenAiConfig, DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT_SECS,
+};
+pub use error::{map_anthropic_error, map_openai_error, map_reqwest_error};
+pub use prompt::{
+    build_synthesis_messages, estimate_messages_tokens, estimate_token_count,
+    SYNTHESIS_SYSTEM_PROMPT,
+};
+pub use types::{ChatRequest, ChatResponse, FinishReason, Message, Role, TokenUsage};

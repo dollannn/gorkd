@@ -27,4 +27,10 @@ thiserror.workspace = true
 # Logging
 tracing.workspace = true
 
+# Secrets
+secrecy.workspace = true
+
+# Retry
+backoff.workspace = true
+
 [dev-dependencies]
